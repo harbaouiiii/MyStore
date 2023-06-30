@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:latest
+    networks:
+      - net1
+    environment:
+      - MYSQL_ROOT_PASSWORD=harbaoui
+      - MYSQL_DATABASE=mydemo
+      - MYSQL_USER=harbaoui
+      - MYSQL_PASSWORD=harbaoui
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+    volumes:
+      - datavolume:/var/lib/mysql
+
+  mydemo:
+    image: mydemo:latest
+    networks:
+      - net1
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    environment:
+      - SPRING_PROFILES_ACTIVE=mysql
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql/mydemo?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=harbaoui
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL5Dialect
+networks:
+  net1: {}
+
+volumes:
+  datavolume:

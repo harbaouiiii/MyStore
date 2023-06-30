@@ -45,4 +45,24 @@ public class ProductController {
         return productService.deleteProduct(id);
     }
 
+    @GetMapping(value = "/category/{name}")
+    public ResponseEntity<List<Product>> getProductByCategory(@PathVariable String name){
+        return productService.getProductByCategory(name);
+    }
+
+    @GetMapping(value = "/{name}")
+    public ResponseEntity<List<Product>> getProductByName(@PathVariable String name){
+        return productService.getProductByName(name);
+    }
+
+    @GetMapping(value = "/price/{min}/{max}")
+    public ResponseEntity<List<Product>> getProductByPriceBetween(@PathVariable Double min, @PathVariable Double max){
+        return productService.getProductByPriceBetween(min,max);
+    }
+
+    @GetMapping(value = "/quantity/{qte}")
+    public ResponseEntity<List<Product>> getProductByQuantity(@PathVariable Integer qte){
+        return productService.getProductByQuantity(qte);
+    }
+
 }

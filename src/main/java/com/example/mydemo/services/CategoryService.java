@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CategoryService {
-    public ResponseEntity<Category> getCategoryById(UUID id);
-    public List<Category> getAllCategories();
-    public ResponseEntity<Category> addCategory(Category category);
-    public ResponseEntity<Category> updateCategory(Category category, UUID id);
-    public ResponseEntity<Void> deleteCategory(UUID id);
+    ResponseEntity<Category> getCategoryById(UUID id);
+    List<Category> getAllCategories();
+    ResponseEntity<Category> addCategory(Category category);
+    ResponseEntity<Category> updateCategory(Category category, UUID id);
+    ResponseEntity<Void> deleteCategory(UUID id);
 }

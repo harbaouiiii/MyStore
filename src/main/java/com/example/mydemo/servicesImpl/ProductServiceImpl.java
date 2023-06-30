@@ -1,5 +1,6 @@
 package com.example.mydemo.servicesImpl;
 
+import com.example.mydemo.entities.Category;
 import com.example.mydemo.entities.Product;
 import com.example.mydemo.repositories.ProductRepository;
 import com.example.mydemo.services.ProductService;
@@ -54,5 +55,29 @@ public class ProductServiceImpl implements ProductService {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @Override
+    public ResponseEntity<List<Product>> getProductByCategory(String name) {
+        Optional<List<Product>> existingProducts = productRepository.findByCategory_Name(name);
+        return existingProducts.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Override
+    public ResponseEntity<List<Product>> getProductByName(String name) {
+        Optional<List<Product>> existingProducts = productRepository.findByNameContains(name);
+        return existingProducts.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Override
+    public ResponseEntity<List<Product>> getProductByPriceBetween(Double min, Double max) {
+        Optional<List<Product>> existingProducts = productRepository.findByPriceBetween(min, max);
+        return existingProducts.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @Override
+    public ResponseEntity<List<Product>> getProductByQuantity(Integer qte) {
+        Optional<List<Product>> existingProducts = productRepository.findByQuantityEquals(qte);
+        return existingProducts.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

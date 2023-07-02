@@ -1,30 +1,24 @@
 package com.example.mydemo.servicesImpl;
 
-import com.example.mydemo.entities.Category;
 import com.example.mydemo.entities.Product;
+import com.example.mydemo.exceptions.ProductNotFoundException;
 import com.example.mydemo.repositories.ProductRepository;
 import com.example.mydemo.services.ProductService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
-
     @Override
-    public ResponseEntity<Product> getProductById(UUID id) {
-        Optional<Product> existingProduct = productRepository.findById(id);
-        return existingProduct.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public Product getProductById(UUID id) {
+        return productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
     }
 
     @Override
@@ -33,51 +27,40 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ResponseEntity<Product> addProduct(Product product) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productRepository.save(product));
+    public Product addProduct(Product product) {
+        return productRepository.save(product);
     }
 
     @Override
-    public ResponseEntity<Product> updateProduct(Product product, UUID id) {
-        Optional<Product> existingProduct = productRepository.findById(id);
-        if(existingProduct.isPresent()) {
-            product.setId(id);
-            return ResponseEntity.ok(productRepository.save(product));
-        }
-        return ResponseEntity.notFound().build();
+    public Product updateProduct(Product product, UUID id) {
+        Product existingProduct = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+        existingProduct.setId(id);
+        return productRepository.save(existingProduct);
     }
 
     @Override
-    public ResponseEntity<Void> deleteProduct(UUID id) {
-        Optional<Product> existingProduct = productRepository.findById(id);
-        if(existingProduct.isPresent()){
-            productRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public void deleteProduct(UUID id) {
+        Product existingProduct = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
+        productRepository.delete(existingProduct);
     }
 
     @Override
-    public ResponseEntity<List<Product>> getProductByCategory(String name) {
-        Optional<List<Product>> existingProducts = productRepository.findByCategory_Name(name);
-        return existingProducts.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public List<Product> getProductByCategory(String name) {
+        return productRepository.findByCategory_Name(name);
     }
 
     @Override
-    public ResponseEntity<List<Product>> getProductByName(String name) {
-        Optional<List<Product>> existingProducts = productRepository.findByNameContains(name);
-        return existingProducts.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public List<Product> getProductByName(String name) {
+        return productRepository.findByNameContains(name);
     }
 
     @Override
-    public ResponseEntity<List<Product>> getProductByPriceBetween(Double min, Double max) {
-        Optional<List<Product>> existingProducts = productRepository.findByPriceBetween(min, max);
-        return existingProducts.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public List<Product> getProductByPriceBetween(Double min, Double max) {
+        return productRepository.findByPriceBetween(min, max);
     }
 
     @Override
-    public ResponseEntity<List<Product>> getProductByQuantity(Integer qte) {
-        Optional<List<Product>> existingProducts = productRepository.findByQuantityEquals(qte);
-        return existingProducts.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public List<Product> getProductByQuantity(Integer qte) {
+        return productRepository.findByQuantityEquals(qte);
     }
 }

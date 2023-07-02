@@ -1,8 +1,8 @@
 package com.example.mydemo.servicesImpl;
 
-import com.example.mydemo.auth.AuthenticationResponse;
-import com.example.mydemo.auth.LoginRequest;
-import com.example.mydemo.auth.RegisterRequest;
+import com.example.mydemo.dtos.AuthenticationResponseDTO;
+import com.example.mydemo.dtos.LoginRequestDTO;
+import com.example.mydemo.dtos.RegisterRequestDTO;
 import com.example.mydemo.config.JwtService;
 import com.example.mydemo.entities.Role;
 import com.example.mydemo.entities.User;
@@ -24,34 +24,34 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     @Override
-    public AuthenticationResponse register(RegisterRequest registerRequest) {
+    public AuthenticationResponseDTO register(RegisterRequestDTO registerRequestDTO) {
         var user = User.builder()
-                .userName(registerRequest.getUserName())
-                .firstName(registerRequest.getFirstName())
-                .lastName(registerRequest.getLastName())
-                .email(registerRequest.getEmail())
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .userName(registerRequestDTO.getUserName())
+                .firstName(registerRequestDTO.getFirstName())
+                .lastName(registerRequestDTO.getLastName())
+                .email(registerRequestDTO.getEmail())
+                .password(passwordEncoder.encode(registerRequestDTO.getPassword()))
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse
+        return AuthenticationResponseDTO
                 .builder()
                 .token(jwtToken)
                 .build();
     }
 
     @Override
-    public AuthenticationResponse login(LoginRequest loginRequest) {
+    public AuthenticationResponseDTO login(LoginRequestDTO loginRequestDTO) {
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
-                    loginRequest.getUserName(),
-                    loginRequest.getPassword()
+                    loginRequestDTO.getUserName(),
+                    loginRequestDTO.getPassword()
             )
         );
-        var user = userRepository.findByUserName(loginRequest.getUserName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        var user = userRepository.findByUserName(loginRequestDTO.getUserName()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.
+        return AuthenticationResponseDTO.
                 builder()
                 .token(jwtToken)
                 .build();

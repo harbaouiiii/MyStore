@@ -1,4 +1,4 @@
-package com.example.mydemo.auth;
+package com.example.mydemo.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationResponse {
+public class AuthenticationResponseDTO {
     private String token;
 }

@@ -1,12 +1,12 @@
 package com.example.mydemo.services;
 
-import com.example.mydemo.auth.AuthenticationResponse;
-import com.example.mydemo.auth.LoginRequest;
-import com.example.mydemo.auth.RegisterRequest;
+import com.example.mydemo.dtos.AuthenticationResponseDTO;
+import com.example.mydemo.dtos.LoginRequestDTO;
+import com.example.mydemo.dtos.RegisterRequestDTO;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AuthenticationService {
-    AuthenticationResponse register(RegisterRequest registerRequest);
-    AuthenticationResponse login(LoginRequest loginRequest);
+    AuthenticationResponseDTO register(RegisterRequestDTO registerRequestDTO);
+    AuthenticationResponseDTO login(LoginRequestDTO loginRequestDTO);
 }

@@ -8,9 +8,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -39,12 +42,14 @@ public class ProductController {
 
     @Operation(summary = "Add product")
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MOD')")
     public ResponseEntity<Product> addProduct(@Valid @RequestBody Product product){
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.addProduct(product));
     }
 
     @Operation(summary = "Update product")
     @PutMapping(value = "/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MOD')")
     public ResponseEntity<Product> updateProduct(@Valid @RequestBody Product product, @PathVariable UUID id){
         try{
             return ResponseEntity.ok(productService.updateProduct(product, id));
@@ -55,10 +60,13 @@ public class ProductController {
 
     @Operation(summary = "Delete product")
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable UUID id){
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Map<String,Boolean>> deleteProduct(@PathVariable UUID id){
+        Map<String,Boolean> response = new HashMap<>();
+        response.put("Product "+ productService.getProductById(id).getName() +" deleted", Boolean.TRUE);
         try{
             productService.deleteProduct(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(response);
         } catch (ProductNotFoundException e){
             return ResponseEntity.notFound().build();
         }
@@ -71,7 +79,7 @@ public class ProductController {
     }
 
     @Operation(summary = "Get product by name")
-    @GetMapping(value = "/{name}")
+    @GetMapping(value = "/name/{name}")
     public ResponseEntity<List<Product>> getProductByName(@PathVariable String name){
         return ResponseEntity.ok(productService.getProductByName(name));
     }

@@ -6,6 +6,8 @@ import com.example.mydemo.dtos.RegisterRequestDTO;
 import com.example.mydemo.config.JwtService;
 import com.example.mydemo.entities.Role;
 import com.example.mydemo.entities.User;
+import com.example.mydemo.exceptions.EmailExistsException;
+import com.example.mydemo.exceptions.UsernameExistsException;
 import com.example.mydemo.repositories.UserRepository;
 import com.example.mydemo.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponseDTO register(RegisterRequestDTO registerRequestDTO) {
+        if(Boolean.TRUE.equals(userRepository.existsByUserName(registerRequestDTO.getUserName()))){
+            throw new UsernameExistsException();
+        }
+        if(Boolean.TRUE.equals(userRepository.existsByEmail(registerRequestDTO.getEmail()))){
+            throw new EmailExistsException();
+        }
         var user = User.builder()
                 .userName(registerRequestDTO.getUserName())
                 .firstName(registerRequestDTO.getFirstName())

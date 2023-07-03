@@ -31,7 +31,6 @@ To build and run the project, follow these steps:
 
 * Clone the repository: git clone https://github.com/harbaouiiii/MyStore.git
 * Navigate to the project directory: cd MyStore
-* Create a new database named "mydemo"
 * Build the project: mvn clean install
 * Run the project: mvn spring-boot:run
 

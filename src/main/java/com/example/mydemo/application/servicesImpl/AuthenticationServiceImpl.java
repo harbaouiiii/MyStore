@@ -35,8 +35,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         var user = User.builder()
                 .userName(registerRequestDTO.getUserName())
-                .firstName(registerRequestDTO.getFirstName())
-                .lastName(registerRequestDTO.getLastName())
+                .firstName(registerRequestDTO.getFirstName().toLowerCase().replace(registerRequestDTO.getFirstName().charAt(0), Character.toUpperCase(registerRequestDTO.getFirstName().charAt(0))))
+                .lastName(registerRequestDTO.getLastName().toUpperCase())
                 .email(registerRequestDTO.getEmail())
                 .password(passwordEncoder.encode(registerRequestDTO.getPassword()))
                 .role(Role.USER)

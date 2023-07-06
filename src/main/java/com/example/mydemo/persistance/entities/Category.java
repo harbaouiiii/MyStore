@@ -1,11 +1,13 @@
 package com.example.mydemo.persistance.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,4 +23,7 @@ public class Category {
     @NotBlank(message = "Category name is required")
     @Size(max = 50)
     private String name;
+    @OneToMany(mappedBy = "category")
+    @ToString.Exclude
+    List<Product> products;
 }

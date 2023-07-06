@@ -1,5 +1,7 @@
 package com.example.mydemo.application.servicesImpl;
 
+import com.example.mydemo.application.dtos.CategoryDTO;
+import com.example.mydemo.application.mappers.CategoryMapper;
 import com.example.mydemo.persistance.entities.Category;
 import com.example.mydemo.application.exceptions.CategoryNotFoundException;
 import com.example.mydemo.persistance.repositories.CategoryRepository;
@@ -15,27 +17,28 @@ import java.util.UUID;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
 
     @Override
-    public Category getCategoryById(UUID id) {
-        return categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
+    public CategoryDTO getCategoryById(UUID id) {
+        return categoryMapper.toCategoryDTO(categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new));
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryDTO> getAllCategories() {
+        return categoryMapper.toCategoryDTO(categoryRepository.findAll());
     }
 
     @Override
-    public Category addCategory(Category category) {
-        return categoryRepository.save(category);
+    public CategoryDTO addCategory(CategoryDTO categoryDTO) {
+        return categoryMapper.toCategoryDTO(categoryRepository.save(categoryMapper.toCategory(categoryDTO)));
     }
 
     @Override
-    public Category updateCategory(Category category, UUID id) {
+    public CategoryDTO updateCategory(CategoryDTO categoryDTO, UUID id) {
         Category existingCategory = categoryRepository.findById(id).orElseThrow(CategoryNotFoundException::new);
         existingCategory.setId(id);
-        return categoryRepository.save(existingCategory);
+        return categoryMapper.toCategoryDTO(categoryRepository.save(existingCategory));
     }
 
     @Override

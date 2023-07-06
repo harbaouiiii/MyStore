@@ -1,5 +1,6 @@
 package com.example.mydemo.presentation.controllers;
 
+import com.example.mydemo.application.dtos.CategoryDTO;
 import com.example.mydemo.persistance.entities.Category;
 import com.example.mydemo.application.exceptions.CategoryNotFoundException;
 import com.example.mydemo.application.services.CategoryService;
@@ -32,13 +33,13 @@ public class CategoryController {
 
     @Operation(summary = Summary.GET_ALL_CATEGORIES)
     @GetMapping
-    public List<Category> getAllCategories(){
+    public List<CategoryDTO> getAllCategories(){
         return categoryService.getAllCategories();
     }
 
     @Operation(summary = Summary.GET_CATEGORY_BY_ID)
     @GetMapping(value = Urls.CATEGORY_ID_PARAM)
-    public ResponseEntity<Category> getCategoryById(@PathVariable UUID id){
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable UUID id){
         try {
             return ResponseEntity.ok(categoryService.getCategoryById(id));
         } catch (CategoryNotFoundException e){
@@ -49,16 +50,16 @@ public class CategoryController {
     @Operation(summary = Summary.ADD_CATEGORY)
     @PostMapping
     @PreAuthorize(Roles.HAS_ROLE_ADMIN_OR_MOD)
-    public ResponseEntity<Category> addCategory(@Valid @RequestBody Category category){
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.addCategory(category));
+    public ResponseEntity<CategoryDTO> addCategory(@Valid @RequestBody CategoryDTO categoryDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.addCategory(categoryDTO));
     }
 
     @Operation(summary = Summary.UPDATE_CATEGORY)
     @PutMapping(value = Urls.CATEGORY_ID_PARAM)
     @PreAuthorize(Roles.HAS_ROLE_ADMIN_OR_MOD)
-    public ResponseEntity<Category> updateCategory(@Valid @RequestBody Category category ,@PathVariable UUID id){
+    public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO ,@PathVariable UUID id){
         try {
-            return ResponseEntity.ok(categoryService.updateCategory(category, id));
+            return ResponseEntity.ok(categoryService.updateCategory(categoryDTO, id));
         } catch (CategoryNotFoundException e){
             return ResponseEntity.notFound().build();
         }

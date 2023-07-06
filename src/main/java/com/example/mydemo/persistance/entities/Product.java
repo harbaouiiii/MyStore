@@ -27,7 +27,7 @@ public class Product {
     @NotNull(message = "Product quantity is required")
     @Min(0)
     private Integer quantity;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Category category;
 }

@@ -1,5 +1,6 @@
 package com.example.mydemo.presentation.controllers;
 
+import com.example.mydemo.application.dtos.UserDTO;
 import com.example.mydemo.persistance.entities.Role;
 import com.example.mydemo.persistance.entities.User;
 import com.example.mydemo.application.exceptions.UserNotFoundException;
@@ -30,35 +31,35 @@ public class UserController {
     @GetMapping
     @Operation(summary = Summary.GET_ALL_USERS)
     @PreAuthorize(Roles.HAS_ROLE_ADMIN)
-    public ResponseEntity<List<User>> getAllUsers(){
+    public ResponseEntity<List<UserDTO>> getAllUsers(){
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping(Urls.ADMINS_URL)
     @Operation(summary = Summary.GET_ALL_ADMINS)
     @PreAuthorize(Roles.HAS_ROLE_ADMIN)
-    public ResponseEntity<List<User>> getAllAdmins(){
+    public ResponseEntity<List<UserDTO>> getAllAdmins(){
         return ResponseEntity.ok(userService.getUsersByRole(Role.ADMIN));
     }
 
     @GetMapping(Urls.MODS_URL)
     @Operation(summary = Summary.GET_ALL_MODS)
     @PreAuthorize(Roles.HAS_ROLE_ADMIN)
-    public ResponseEntity<List<User>> getAllMods(){
+    public ResponseEntity<List<UserDTO>> getAllMods(){
         return ResponseEntity.ok(userService.getUsersByRole(Role.MOD));
     }
 
     @GetMapping(Urls.CURRENT_USER_URL)
     @Operation(summary = Summary.GET_CURRENT_USER)
     @PreAuthorize(Roles.HAS_ROLE_ADMIN)
-    public ResponseEntity<User> getCurrentUser(Principal principal){
+    public ResponseEntity<UserDTO> getCurrentUser(Principal principal){
         return ResponseEntity.ok(userService.getUserByUsername(principal.getName()));
     }
 
     @GetMapping(Urls.USER_ID_PARAM)
     @Operation(summary = Summary.GET_USER_BY_ID)
     @PreAuthorize(Roles.HAS_ROLE_ADMIN)
-    public ResponseEntity<User> getUserById(@PathVariable UUID id){
+    public ResponseEntity<UserDTO> getUserById(@PathVariable UUID id){
         try{
             return ResponseEntity.ok(userService.getUserById(id));
         } catch (UserNotFoundException e) {
@@ -69,7 +70,7 @@ public class UserController {
     @GetMapping(Urls.USERNAME_URL)
     @Operation(summary = Summary.GET_USER_BY_USERNAME)
     @PreAuthorize(Roles.HAS_ROLE_ADMIN)
-    public ResponseEntity<User> getUserByUsername(@PathVariable String username){
+    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username){
         try{
             return ResponseEntity.ok(userService.getUserByUsername(username));
         } catch (UserNotFoundException e) {
@@ -80,7 +81,7 @@ public class UserController {
     @GetMapping(Urls.EMAIL_URL)
     @Operation(summary = Summary.GET_USER_BY_EMAIL)
     @PreAuthorize(Roles.HAS_ROLE_ADMIN)
-    public ResponseEntity<User> getUserByEmail(@PathVariable String email){
+    public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email){
         try{
             return ResponseEntity.ok(userService.getUserByEmail(email));
         } catch (UserNotFoundException e) {
@@ -91,10 +92,10 @@ public class UserController {
     @PatchMapping(Urls.USER_ID_PARAM)
     @Operation(summary = Summary.UPDATE_USER)
     @PreAuthorize(Roles.HAS_ROLE_ADMIN)
-    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable UUID id){
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO, @PathVariable UUID id){
         try{
-            user.setId(id);
-            return ResponseEntity.ok(userService.updateUser(user, id));
+            userDTO.setId(id);
+            return ResponseEntity.ok(userService.updateUser(userDTO, id));
         } catch (UserNotFoundException e) {
             return ResponseEntity.notFound().build();
         }

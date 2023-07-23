@@ -23,6 +23,5 @@ public class Category {
     @Size(max = 50)
     private String name;
     @OneToMany(mappedBy = "category")
-    @ToString.Exclude
     List<Product> products;
 }

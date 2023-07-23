@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -27,7 +28,13 @@ public class Product {
     @NotNull(message = "Product quantity is required")
     @Min(0)
     private Integer quantity;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "category_id")
     private Category category;
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "image_id")
+    )
+    private Set<Image> images;
 }

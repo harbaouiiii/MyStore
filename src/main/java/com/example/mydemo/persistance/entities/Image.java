@@ -1,15 +1,13 @@
 package com.example.mydemo.persistance.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -26,4 +24,6 @@ public class Image {
     @Lob
     @Column(length = 1000)
     private byte[] imageData;
+    @ManyToMany(mappedBy = "images")
+    private Set<Product> products;
 }

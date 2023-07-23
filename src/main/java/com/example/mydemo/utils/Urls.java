@@ -24,5 +24,6 @@ public class Urls {
     public static final String DELETE_USER_URL = "/{username}";
     public static final String FORGOT_PASSWORD_URL = "/forgot_password";
 
+    public static final String RESET_PASSWORD_URL = "/reset_password";
 
 }

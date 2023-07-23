@@ -1,5 +1,6 @@
 package com.example.mydemo.presentation.controllers;
 
+import com.example.mydemo.application.dtos.PasswordResetDTO;
 import com.example.mydemo.application.dtos.PasswordResetRequestDTO;
 import com.example.mydemo.application.dtos.UserDTO;
 import com.example.mydemo.persistance.entities.Role;
@@ -17,6 +18,7 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -128,13 +130,30 @@ public class UserController {
     public ResponseEntity<Map<String,Boolean>> forgotPassword(@RequestBody @Valid PasswordResetRequestDTO requestDTO) throws MessagingException, UnsupportedEncodingException {
         Map<String,Boolean> response = new HashMap<>();
 
-        String token = RandomStringUtils.random(30);
+        String token = RandomStringUtils.random(10);
         userService.updateResetPasswordToken(token, requestDTO.getEmail());
 
         String resetPasswordLink = "http://localhost:8080"+Urls.BASE_USER_URL+"/reset_password?token="+token;
         sendEmail(requestDTO.getEmail(), resetPasswordLink);
 
         response.put("Reset password link sent to "+requestDTO.getEmail(),Boolean.TRUE);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(Urls.RESET_PASSWORD_URL)
+    public ResponseEntity<Map<String,Boolean>> resetPassword(@RequestParam("token") String token, @RequestBody @Valid PasswordResetDTO requestDTO){
+        Map<String,Boolean> response = new HashMap<>();
+        User user = userService.getByResetPasswordToken(token);
+        if(user == null){
+            response.put("Invalid token",Boolean.FALSE);
+            return ResponseEntity.ok(response);
+        }
+        /*if (StringUtils.equals(requestDTO.getNewPassword(),requestDTO.getConfirmPassword())){
+            response.put("Passwords don't match",Boolean.FALSE);
+            return ResponseEntity.ok(response);
+        }*/
+        userService.updatePassword(user, requestDTO.getNewPassword());
+        response.put("Password updated successfully",Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
 

@@ -6,6 +6,7 @@ public class Urls {
     public static final String BASE_PRODUCT_URL = "/product";
     public static final String BASE_CATEGORY_URL = "/category";
     public static final String BASE_USER_URL = "/user";
+    public static final String BASE_IMAGE_URL = "/image";
     public static final String CATEGORY_ID_PARAM = "/{id}";
     public static final String PRODUCT_ID_PARAM = "/{id}";
     public static final String PRODUCT_CATEGORY_NAME_PARAM = "/category/{name}";

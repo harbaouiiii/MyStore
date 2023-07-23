@@ -1,6 +1,7 @@
 package com.example.mydemo.utils;
 
 public class Summary {
+
     private Summary() {}
     public static final String GET_ALL_CATEGORIES = "Get all categories";
     public static final String GET_ALL_PRODUCTS = "Get all products";
@@ -27,4 +28,8 @@ public class Summary {
     public static final String GET_CURRENT_USER = "Get current user";
     public static final String UPDATE_USER = "Update user";
     public static final String DELETE_USER_BY_USERNAME = "Delete user by username";
+    public static final String GET_IMAGE_BY_NAME = "Get image by name";
+    public static final String GET_IMAGE_INFO_BY_NAME = "Get image info by name";
+    public static final String UPLOAD_IMAGE = "Upload image";
+
 }

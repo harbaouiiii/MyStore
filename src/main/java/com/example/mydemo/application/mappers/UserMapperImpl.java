@@ -34,7 +34,8 @@ public class UserMapperImpl implements UserMapper {
                 userDTO.getLastName(),
                 userDTO.getEmail(),
                 userRepository.findByUserName(userDTO.getUserName()).orElseThrow().getPassword(),
-                userDTO.getRole()
+                userDTO.getRole(),
+                userRepository.findByUserName(userDTO.getUserName()).orElseThrow().getResetPasswordToken()
         );
     }
 

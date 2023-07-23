@@ -16,5 +16,8 @@ public interface UserService {
     List<UserDTO> getUsersByRole(Role role);
     UserDTO updateUser(UserDTO userDTO, UUID id);
     void deleteUser(String username);
+    void updateResetPasswordToken(String token, String email);
+    User getByResetPasswordToken(String token);
+    void updatePassword(User user, String newPassword);
 
 }

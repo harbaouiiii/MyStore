@@ -22,6 +22,7 @@ public class Urls {
     public static final String USERNAME_URL = "/username/{username}";
     public static final String EMAIL_URL = "/email/{email}";
     public static final String DELETE_USER_URL = "/{username}";
+    public static final String FORGOT_PASSWORD_URL = "/forgot_password";
 
 
 }

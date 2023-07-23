@@ -33,6 +33,7 @@ public class SecurityConfiguration {
                     .requestMatchers("/login").permitAll()
                     .requestMatchers("/swagger-ui/**").permitAll()
                     .requestMatchers("/v3/**").permitAll()
+                    .requestMatchers("/user/forgot_password").permitAll()
                     .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

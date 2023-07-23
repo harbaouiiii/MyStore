@@ -8,6 +8,7 @@ import com.example.mydemo.application.exceptions.UserNotFoundException;
 import com.example.mydemo.persistance.repositories.UserRepository;
 import com.example.mydemo.application.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,5 +58,27 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(String username) {
         User user = userRepository.findByUserName(username).orElseThrow(UserNotFoundException::new);
         userRepository.delete(user);
+    }
+
+    @Override
+    public void updateResetPasswordToken(String token, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        user.setResetPasswordToken(token);
+        userRepository.save(user);
+    }
+
+    @Override
+    public User getByResetPasswordToken(String token) {
+        return userRepository.findByResetPasswordToken(token);
+    }
+
+    @Override
+    public void updatePassword(User user, String newPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
+
+        user.setResetPasswordToken(null);
+        userRepository.save(user);
     }
 }

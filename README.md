@@ -5,6 +5,7 @@
 * Category management
 * User registration and login with JWT authentication
 * Password encryption using BCrypt
+* Password Reset
 * Role-based authorization with Spring Security
 * Customized access denied handling
 
@@ -13,6 +14,7 @@
 * Spring Boot 3.0
 * Spring Security 6.0
 * Spring Data JPA
+* Spring Mail
 * MySQL
 * Spring Validation
 * JSON Web Tokens (JWT)

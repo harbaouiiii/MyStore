@@ -6,6 +6,7 @@ public class Urls {
     public static final String BASE_PRODUCT_URL = "/product";
     public static final String BASE_CATEGORY_URL = "/category";
     public static final String BASE_USER_URL = "/user";
+    public static final String BASE_AUTH_URL = "/auth";
     public static final String BASE_IMAGE_URL = "/image";
     public static final String CATEGORY_ID_PARAM = "/{id}";
     public static final String PRODUCT_ID_PARAM = "/{id}";
@@ -23,7 +24,6 @@ public class Urls {
     public static final String EMAIL_URL = "/email/{email}";
     public static final String DELETE_USER_URL = "/{username}";
     public static final String FORGOT_PASSWORD_URL = "/forgot_password";
-
     public static final String RESET_PASSWORD_URL = "/reset_password";
 
 }

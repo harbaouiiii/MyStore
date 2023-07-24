@@ -11,7 +11,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(
@@ -29,12 +28,9 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                    .requestMatchers("/register").permitAll()
-                    .requestMatchers("/login").permitAll()
+                    .requestMatchers("/auth/**").permitAll()
                     .requestMatchers("/swagger-ui/**").permitAll()
                     .requestMatchers("/v3/**").permitAll()
-                    .requestMatchers("/user/forgot_password").permitAll()
-                    .requestMatchers("/user/reset_password").permitAll()
                     .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

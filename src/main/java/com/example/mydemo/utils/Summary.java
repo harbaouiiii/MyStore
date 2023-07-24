@@ -31,5 +31,7 @@ public class Summary {
     public static final String GET_IMAGE_BY_NAME = "Get image by name";
     public static final String GET_IMAGE_INFO_BY_NAME = "Get image info by name";
     public static final String UPLOAD_IMAGE = "Upload image";
+    public static final String FORGOT_PASSWORD = "Send reset password link to user's email";
+    public static final String RESET_PASSWORD = "Reset password";
 
 }

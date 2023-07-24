@@ -37,7 +37,7 @@ import java.util.*;
 public class UserController {
 
     private final UserService userService;
-    private final JavaMailSender mailSender;
+
 
     @GetMapping
     @Operation(summary = Summary.GET_ALL_USERS)
@@ -124,58 +124,6 @@ public class UserController {
         } catch (UserNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    @PostMapping(Urls.FORGOT_PASSWORD_URL)
-    public ResponseEntity<Map<String,Boolean>> forgotPassword(@RequestBody @Valid PasswordResetRequestDTO requestDTO) throws MessagingException, UnsupportedEncodingException {
-        Map<String,Boolean> response = new HashMap<>();
-
-        String token = RandomStringUtils.random(10);
-        userService.updateResetPasswordToken(token, requestDTO.getEmail());
-
-        String resetPasswordLink = "http://localhost:8080"+Urls.BASE_USER_URL+"/reset_password?token="+token;
-        sendEmail(requestDTO.getEmail(), resetPasswordLink);
-
-        response.put("Reset password link sent to "+requestDTO.getEmail(),Boolean.TRUE);
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping(Urls.RESET_PASSWORD_URL)
-    public ResponseEntity<Map<String,Boolean>> resetPassword(@RequestParam("token") String token, @RequestBody @Valid PasswordResetDTO requestDTO){
-        Map<String,Boolean> response = new HashMap<>();
-        User user = userService.getByResetPasswordToken(token);
-        if(user == null){
-            response.put("Invalid token",Boolean.FALSE);
-            return ResponseEntity.ok(response);
-        }
-        /*if (StringUtils.equals(requestDTO.getNewPassword(),requestDTO.getConfirmPassword())){
-            response.put("Passwords don't match",Boolean.FALSE);
-            return ResponseEntity.ok(response);
-        }*/
-        userService.updatePassword(user, requestDTO.getNewPassword());
-        response.put("Password updated successfully",Boolean.TRUE);
-        return ResponseEntity.ok(response);
-    }
-
-    public void sendEmail(String recipientEmail, String link) throws MessagingException, UnsupportedEncodingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        helper.setFrom("contact@mystore.tn", "MyStore Support");
-        helper.setTo(recipientEmail);
-
-        String subject = "Here's the link to reset your password";
-
-        String content = "<p>Hello,</p>"
-                + "<p>You have requested to reset your password.</p>"
-                + "<p>Click the link below to change your password:</p>"
-                + "<p><a href=\"" + link + "\">Change my password</a></p>";
-
-        helper.setSubject(subject);
-
-        helper.setText(content, true);
-
-        mailSender.send(message);
     }
 
 }
